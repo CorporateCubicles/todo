@@ -1,0 +1,29 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "sample todo app for our office",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CorporateCubicles/todo.git"
+  },
+  "keywords": [
+    "wishlist",
+    "todo",
+    "work",
+    "recent",
+    "work"
+  ],
+  "author": "corporatecubicles",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CorporateCubicles/todo/issues"
+  },
+  "homepage": "https://github.com/CorporateCubicles/todo#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
