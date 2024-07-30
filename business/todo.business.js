@@ -10,7 +10,13 @@ const createTodo = async(todoData)=>{
     }
 }
 
+const getAllTodo = async() => todo.find();
+
+const getTodoById = async(id) => todo.findById(id);
+
 module.exports ={
     createTodo,
+    getAllTodo,
+    getTodoById
     
 }
