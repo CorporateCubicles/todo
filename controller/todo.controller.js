@@ -1,5 +1,5 @@
 
-const {createTodo, getAllTodo, getTodoById} = require('../business/todo.business');
+const {createTodo, getAllTodo, getTodoById, getTodoByName, getTodoByStatus, updateTodoById} = require('../business/todo.business');
 
 const {format} = require('date-fns');
 
@@ -33,9 +33,57 @@ const getTodoByIdController = async (req, res) =>{
      }   
     }
 
+const getTodoByNameController = async (req, res)=>{
+    const {name} = req.params;
+    const item = await getTodoByName(name);
+    if(!item){
+        res.status(404).json({message: 'Given Todo Name not found!!'});
+    }
+    else{
+        res.status(200).json(item);
+    }
+} 
+
+const getTodoByStatusController = async (req, res)=>{
+    const {status} = req.params;
+    const item = await getTodoByStatus(status);
+    if(!item){
+        res.status(404).json({message: 'Given Todo Status not found!!'});
+    }
+    else{
+        res.status(200).json(item);
+    }
+} 
+
+const updateTodoStatusByIdController = async (req, res)=>{
+    try{
+        const {id} = req.params;
+    let todoData = await getTodoById(id);
+    if(!todoData){
+        res.status(404).json({message: 'Given Todo Id not exist!!'});        
+    }
+    todoData.status = req.body.status;
+    todoData.updatedat = format( new Date(), 'yyyy-MM-dd HH:mm');
+    const item = await updateTodoById(id, todoData);
+    if(!item){
+        res.status(404).json({message: 'Given Todo Id not exist!!'});
+    }else{
+        res.json(item);
+    }
+
+
+    }catch(err){
+        res.status(500).send(err);
+    }
+    
+
+}
 
 module.exports = {
     createTodoController,
     getAlltodoController,
-    getTodoByIdController
+    getTodoByIdController,
+    getTodoByNameController,
+    getTodoByStatusController,
+    updateTodoStatusByIdController
 }
