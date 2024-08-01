@@ -15,7 +15,7 @@ const createTodoController = async (req, res) =>{
     res.status(202).json(item);
 
 };
-
+//
 const getAlltodoController = async(req, res)=>{
     const items = await getAllTodo();
     res.status(202).json(items);
