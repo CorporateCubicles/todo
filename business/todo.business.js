@@ -23,12 +23,23 @@ const getTodoByStatus = async(status) => todo.find({status: status}, {todoname: 
 
 const updateTodoById = async(id, updatedTodoData) => todo.findByIdAndUpdate(id, updatedTodoData,{ new:true,}); 
 
+const deleteTodoById = async(id) =>{
+    try{
+        const deletedTodo = await todo.findByIdAndDelete(id);
+        return deletedTodo;
+
+    } catch(error){
+        throw error;
+    }
+}
+
 module.exports ={
     createTodo,
     getAllTodo,
     getTodoById,
     getTodoByName,
     getTodoByStatus,
-    updateTodoById
+    updateTodoById,
+    deleteTodoById
     
 }

@@ -1,5 +1,5 @@
 
-const {createTodo, getAllTodo, getTodoById, getTodoByName, getTodoByStatus, updateTodoById} = require('../business/todo.business');
+const {createTodo, getAllTodo, getTodoById, getTodoByName, getTodoByStatus, updateTodoById, deleteTodoById} = require('../business/todo.business');
 
 const {format} = require('date-fns');
 
@@ -75,9 +75,17 @@ const updateTodoStatusByIdController = async (req, res)=>{
     }catch(err){
         res.status(500).send(err);
     }
-    
-
 }
+
+const deleteTodoByIdController = async (req, res) =>{
+    const {id} = req.params;
+    const deletedItem = await deleteTodoById(id);
+    if(!deletedItem){
+        res.status(404).json({message: "Given TODO id does not exist"});
+    }else {
+        res.json({message : `Todo item deleted`});
+    }
+} 
 
 module.exports = {
     createTodoController,
@@ -85,5 +93,6 @@ module.exports = {
     getTodoByIdController,
     getTodoByNameController,
     getTodoByStatusController,
-    updateTodoStatusByIdController
+    updateTodoStatusByIdController,
+    deleteTodoByIdController
 }
