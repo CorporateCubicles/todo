@@ -3,6 +3,8 @@ const {createTodo, getAllTodo, getTodoById, getTodoByName, getTodoByStatus, upda
 
 const {format} = require('date-fns');
 
+const XLSX = require('xlsx');
+
 const createTodoController = async (req, res) =>{
     const newItem = {
         todoname: req.body.todoname,
@@ -85,7 +87,58 @@ const deleteTodoByIdController = async (req, res) =>{
     }else {
         res.json({message : `Todo item deleted`});
     }
-} 
+}
+
+// const exportTodoController = async (req, res) =>{
+//     try{
+//         const todoData = await getAlltodoController();
+//         const workbook = XLSX.utils.book_new();
+
+//     const worksheet = XLSX.utils.json_to_sheet(todoData);
+//     XLSX.utils.book_append_sheet(workbook, worksheet, 'TODO');
+
+//     res.setHeader('Content-Disposition', 'attachment; filename = output.xlsx');
+//     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+//     XLSX.write(res, workbook,{bookSST: true});
+
+//     console.log('excel file sent as a response');
+
+
+//     }catch(err){
+//         throw err;
+//     }
+
+// }
+
+const exportTodoController = async (req, res) => {
+    // try {
+    //     // Fetch all todos
+    //     const todoData = await getAllTodo(); // Directly calling the business logic function
+
+    //     if (todoData.length === 0) {
+    //         return res.status(404).send('No todos found to export');
+    //     }
+
+    //     // Create a new Excel workbook and worksheet
+    //     const workbook = XLSX.utils.book_new();
+    //     const worksheet = XLSX.utils.json_to_sheet(todoData);
+    //     XLSX.utils.book_append_sheet(workbook, worksheet, 'TODO');
+
+    //     // Convert workbook to a buffer
+    //     const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+
+    //     // Send Excel file in the response
+    //     res.setHeader('Content-Disposition', 'attachment; filename=output.xlsx');
+    //     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    //     res.send(buffer);
+
+    //     console.log('Excel file sent as a response');
+    // } catch (err) {
+    //     console.error('Error exporting data:', err);
+    //     res.status(500).send('Error exporting data');
+    // }
+};
 
 module.exports = {
     createTodoController,
@@ -94,5 +147,6 @@ module.exports = {
     getTodoByNameController,
     getTodoByStatusController,
     updateTodoStatusByIdController,
-    deleteTodoByIdController
+    deleteTodoByIdController,
+    exportTodoController
 }
