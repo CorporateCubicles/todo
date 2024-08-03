@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 
 const todoRoute = require('./route/todo.route');
+const userRouter = require('./route/user.route');
 
 require('dotenv').config();
 
@@ -21,6 +22,8 @@ db.once('open', ()=>{
 //
 app.use(express.json());
 app.use('/todo', todoRoute);
+
+app.use('/user',userRouter);
 
 app.get('/', function (req, res) {
   res.send('Hello to the world of Corporate Cubicles!!!');
