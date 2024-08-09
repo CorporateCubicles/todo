@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 
 const todoRoute = require('./route/todo.route');
 const userRouter = require('./route/user.route');
+const loginRoute = require('./route/login.route');
+const {validateJWT} = require('./middleware/verifyJWT');
 
 require('dotenv').config();
 
@@ -21,9 +23,11 @@ db.once('open', ()=>{
 });
 //
 app.use(express.json());
-app.use('/todo', todoRoute);
+app.use('/todo', validateJWT, todoRoute);
 
 app.use('/user',userRouter);
+
+app.use('/auth',loginRoute);
 
 app.get('/', function (req, res) {
   res.send('Hello to the world of Corporate Cubicles!!!');
