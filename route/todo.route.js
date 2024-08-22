@@ -8,7 +8,8 @@ const {createTodoController, getAlltodoController, getTodoByIdController, getTod
 router.post('/create', createTodoController);
 router.get('/',getAlltodoController);
 
-router.get('/:id', getTodoByIdController);
+// router.get('/:id', getTodoByIdController);            
+router.get('/getbyid/:id', getTodoByIdController);
 router.get('/gettodobyname/:name', getTodoByNameController );
 router.get('/gettodobystatus/:status', getTodoByStatusController );
 router.put('/:id', updateTodoStatusByIdController);

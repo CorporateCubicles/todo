@@ -23,7 +23,9 @@ db.once('open', ()=>{
 });
 //
 app.use(express.json());
-app.use('/todo', validateJWT, todoRoute);
+
+app.use('/todo', todoRoute);
+// app.use('/todo', validateJWT, todoRoute);
 
 app.use('/user',userRouter);
 
