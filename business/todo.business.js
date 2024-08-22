@@ -13,6 +13,8 @@ const createTodo = async(todoData)=>{
 
 const getAllTodo = async() => todo.find();
 
+const getAllTodoForExport = async() => todo.find({}, {_id:0}).lean();
+
 const getTodoById = async(id) => todo.findById(id);
 
 // const getTodoById = async(todoId) => todo.findOne({_id: todoId});
@@ -40,6 +42,7 @@ module.exports ={
     getTodoByName,
     getTodoByStatus,
     updateTodoById,
-    deleteTodoById
+    deleteTodoById,
+    getAllTodoForExport
     
 }

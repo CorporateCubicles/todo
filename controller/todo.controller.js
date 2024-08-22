@@ -1,5 +1,5 @@
 
-const {createTodo, getAllTodo, getTodoById, getTodoByName, getTodoByStatus, updateTodoById, deleteTodoById} = require('../business/todo.business');
+const {createTodo, getAllTodo, getTodoById, getTodoByName, getTodoByStatus, updateTodoById, deleteTodoById, getAllTodoForExport} = require('../business/todo.business');
 
 const {format} = require('date-fns');
 
@@ -89,29 +89,33 @@ const deleteTodoByIdController = async (req, res) =>{
     }
 }
 
-// const exportTodoController = async (req, res) =>{
-//     try{
-//         const todoData = await getAlltodoController();
-//         const workbook = XLSX.utils.book_new();
+const exportTodoController = async (req, res) =>{
+    try{
+        const todoData = await getAllTodoForExport();
+        const workbook = XLSX.utils.book_new();
 
-//     const worksheet = XLSX.utils.json_to_sheet(todoData);
-//     XLSX.utils.book_append_sheet(workbook, worksheet, 'TODO');
+    const worksheet = XLSX.utils.json_to_sheet(todoData);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'TODO');
 
-//     res.setHeader('Content-Disposition', 'attachment; filename = output.xlsx');
-//     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    const buffer = XLSX.write(workbook, {bookType: "xlsx", type: "buffer"});
 
-//     XLSX.write(res, workbook,{bookSST: true});
+    res.setHeader('Content-Disposition', 'attachment; filename = output.xlsx');
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
-//     console.log('excel file sent as a response');
+    res.send(buffer);
+
+    // XLSX.write(res, workbook,{bookSST: true});
+
+    console.log('excel file sent as a response');
 
 
-//     }catch(err){
-//         throw err;
-//     }
+    }catch(err){
+        res.send(err);
+    }
 
-// }
+}
 
-const exportTodoController = async (req, res) => {
+// const exportTodoController = async (req, res) => {
     // try {
     //     // Fetch all todos
     //     const todoData = await getAllTodo(); // Directly calling the business logic function
@@ -138,7 +142,7 @@ const exportTodoController = async (req, res) => {
     //     console.error('Error exporting data:', err);
     //     res.status(500).send('Error exporting data');
     // }
-};
+// };
 
 module.exports = {
     createTodoController,
