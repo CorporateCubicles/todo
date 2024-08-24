@@ -2,8 +2,8 @@ const {findUserByEmail} =  require('../business/user.business');
 const jwt = require('jsonwebtoken');
 const md5 = require('md5');
 const {format} = require('date-fns');
+require('dotenv').config();
 
-const secretKey = 'your-secret-key';
 
 const verifyPassword = (userInputPassword, hashedPassword) =>{
     const convertedInputPassword = md5(userInputPassword);
@@ -18,7 +18,7 @@ const verifyLoginController = async(req,res)=>{
     return res.status(401).json({message: 'Authentication failed'});
 }
 
-const token = jwt.sign({email}, secretKey, {expiresIn: '1h'});
+const token = jwt.sign({email}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
 res.json({message: 'Authentical successful', token});
 
 
