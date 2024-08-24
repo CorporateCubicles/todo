@@ -24,8 +24,8 @@ db.once('open', ()=>{
 //
 app.use(express.json());
 
-app.use('/todo', todoRoute);
-// app.use('/todo', validateJWT, todoRoute);
+// app.use('/todo', todoRoute);
+app.use('/todo', validateJWT, todoRoute);
 
 app.use('/user',userRouter);
 
@@ -37,5 +37,5 @@ app.get('/', function (req, res) {
 
 const portNo = process.env.PORT_NO;
 app.listen(portNo, ()=>{
-    console.log(` Application running on Port Numbers ${portNo}`);
+    console.log(`Application running on Port Numbers ${portNo}`);
 });

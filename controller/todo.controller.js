@@ -1,9 +1,15 @@
 
-const {createTodo, getAllTodo, getTodoById, getTodoByName, getTodoByStatus, updateTodoById, deleteTodoById, getAllTodoForExport} = require('../business/todo.business');
+const { getAllTodo, getTodoById, getTodoByName, getTodoByStatus, updateTodoById, deleteTodoById, getAllTodoForExport} = require('../business/todo.business');
 
+const business1 = require('../business/todo.business'); 
 const {format} = require('date-fns');
+const multer  = require('multer')
+const fs = require('fs');
 
 const XLSX = require('xlsx');
+
+const storage = multer.memoryStorage();
+const upload = multer({storage});
 
 const createTodoController = async (req, res) =>{
     const newItem = {
@@ -13,7 +19,7 @@ const createTodoController = async (req, res) =>{
         updatedat: format( new Date(), 'yyyy-MM-dd HH:mm'),
 
     };
-    const item = await createTodo(newItem);
+    const item = await business1.createTodo(newItem); //another method
     res.status(202).json(item);
 
 };
@@ -115,34 +121,29 @@ const exportTodoController = async (req, res) =>{
 
 }
 
-// const exportTodoController = async (req, res) => {
-    // try {
-    //     // Fetch all todos
-    //     const todoData = await getAllTodo(); // Directly calling the business logic function
+const importTodoController = async(req, res)=>{
+    try{
 
-    //     if (todoData.length === 0) {
-    //         return res.status(404).send('No todos found to export');
-    //     }
+        if(!req.file){
+            return res.status(400).json({message: 'No file uploaded'});
+        }
+        const workbook = XLSX.read(req.file.buffer);
+        const sheetNames = workbook.SheetNames;
 
-    //     // Create a new Excel workbook and worksheet
-    //     const workbook = XLSX.utils.book_new();
-    //     const worksheet = XLSX.utils.json_to_sheet(todoData);
-    //     XLSX.utils.book_append_sheet(workbook, worksheet, 'TODO');
+        const excelData = [];
+        sheetNames.forEach((sheetName)=>{
+            const worksheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+             excelData.push(...jsonData);
+        });
 
-    //     // Convert workbook to a buffer
-    //     const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+        res.json({message: 'Excel file uploaded', data: excelData});
 
-    //     // Send Excel file in the response
-    //     res.setHeader('Content-Disposition', 'attachment; filename=output.xlsx');
-    //     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    //     res.send(buffer);
-
-    //     console.log('Excel file sent as a response');
-    // } catch (err) {
-    //     console.error('Error exporting data:', err);
-    //     res.status(500).send('Error exporting data');
-    // }
-// };
+    }catch(err){
+        consol.error('Error in parsing Excel file', err);
+        res.status(500).json({message: 'Internal server error'});
+    }
+};
 
 module.exports = {
     createTodoController,
@@ -152,5 +153,6 @@ module.exports = {
     getTodoByStatusController,
     updateTodoStatusByIdController,
     deleteTodoByIdController,
-    exportTodoController
+    exportTodoController,
+    importTodoController
 }
